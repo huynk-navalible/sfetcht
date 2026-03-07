@@ -1,0 +1,26 @@
+#!/bin/bash
+
+hostname=$(cat /etc/hostname)
+uptime=$(uptime | awk '{print $1}')
+wm=$DESKTOP_SESSION
+. /etc/os-release
+
+info=$(printf '%s\n' "
+	Hostname: ${hostname}
+	Uptime: ${uptime}
+	WM: ${wm}
+	OS: ${NAME}
+")
+
+# Art stolen from info-mono's diyfetch 
+# https://github.com/info-mono/diyfetch
+art="   [34m___[0m
+   [34m([0m.. [34m|[0m
+   [34m([33m<> [34m|[0m
+  [34m/ [0m__  [34m\[0m
+ [34m( [0m/  \[34m/ |[0m
+[33m_[34m/\ [0m__)[34m/[33m_[34m)[0m
+[33m\/[34m-____[33m\/[0m
+"
+
+gum join --horizontal "$art" "$info"
