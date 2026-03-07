@@ -1,15 +1,19 @@
-#!/bin/bash
+#!/bin/sh
 
 hostname=$(cat /etc/hostname)
 uptime=$(uptime | awk '{print $1}')
 wm=$DESKTOP_SESSION
 . /etc/os-release
+# Colorstrip from info-mono's colorstrip
+# https://github.com/info-mono/colorstrip
+info=$(printf "	
+	[36mOS:[0m ${NAME}
+	[36mHostname:[0m ${hostname}
+	[36mUptime:[0m ${uptime}
+	[36mWM:[0m ${wm}
+	
+	[0;1;90m███[0;1;91m███[0;1;92m███[0;1;93m███[0;1;94m███[0;1;95m███[0;1;96m███[0;1;97m███[0m
 
-info=$(printf '%s\n' "
-	Hostname: ${hostname}
-	Uptime: ${uptime}
-	WM: ${wm}
-	OS: ${NAME}
 ")
 
 # Art stolen from info-mono's diyfetch 
@@ -22,5 +26,4 @@ art="   [34m___[0m
 [33m_[34m/\ [0m__)[34m/[33m_[34m)[0m
 [33m\/[34m-____[33m\/[0m
 "
-
 gum join --horizontal "$art" "$info"
