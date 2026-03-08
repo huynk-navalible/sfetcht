@@ -1,29 +1,24 @@
 #!/bin/sh
-
-hostname=$(cat /etc/hostname)
-uptime=$(uptime | awk '{print $1}')
+# get info 
 wm=$DESKTOP_SESSION
-. /etc/os-release
-# Colorstrip from info-mono's colorstrip
+os=$(cat /etc/os-release | grep ^NAME | awk -F'"' '{print $2}')
+kernel=$(uname -r)
+shell=$(ps -o comm= -p "$PPID")
+
+# color strip from info-mono's colorstrip
 # https://github.com/info-mono/colorstrip
-info=$(printf "	
-	[36mOS:[0m ${NAME}
-	[36mHostname:[0m ${hostname}
-	[36mUptime:[0m ${uptime}
-	[36mWM:[0m ${wm}
-	
-	[0;1;90m███[0;1;91m███[0;1;92m███[0;1;93m███[0;1;94m███[0;1;95m███[0;1;96m███[0;1;97m███[0m
+# logo that i stole and changed from info-mono's os-ansi
+# https://github.com/info-mono/os-ansi
 
-")
+echo -e "
 
-# Art stolen from info-mono's diyfetch 
-# https://github.com/info-mono/diyfetch
-art="   [34m___[0m
-   [34m([0m.. [34m|[0m
-   [34m([33m<> [34m|[0m
-  [34m/ [0m__  [34m\[0m
- [34m( [0m/  \[34m/ |[0m
-[33m_[34m/\ [0m__)[34m/[33m_[34m)[0m
-[33m\/[34m-____[33m\/[0m
+       \e[2;36m___\e[0m	\e[36m$(whoami)\e[0m@\e[36m$(cat /etc/hostname)\e[0m
+      \e[2;36m(\e[0m.. \e[2;36m|\e[0m	\e[36mOS:\e[0m ${os}
+      \e[2;36m(\e[0m\e[33m<>\e[0m \e[2;36m|\e[0m	\e[36mKernel:\e[0m ${kernel}
+     \e[2;36m/\e[0m __  \e[2;36m\ \e[0m	\e[36mShell:\e[0m ${shell}
+    \e[2;36m(\e[0m /  \ \e[2;36m |\e[0m	\e[36mWM:\e[0m ${wm}
+  \e[33m_\e[2;36m/ \e[0m \__/ \e[33m_\e[0m\e[2;36m)\e[0m	\e[0;30m███\e[0;31m███\e[0;32m███\e[0;33m███\e[0;34m███\e[0;35m███\e[0;36m███\e[0;37m███\e[0m
+  \e[33m\/\e[2;36m______\e[0m\e[33m\/\e[0m	\e[0;1;90m███\e[0;1;91m███\e[0;1;92m███\e[0;1;93m███\e[0;1;94m███\e[0;1;95m███\e[0;1;96m███\e[0;1;97m███\e[0m
+
+
 "
-gum join --horizontal "$art" "$info"
